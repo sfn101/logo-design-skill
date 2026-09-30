@@ -20,7 +20,39 @@ production-ready SVG files and brand guidelines.
   web-manifest set.
 
 **Contents:** [How it works](#how-it-works) · [Install](#install) · [Examples](#examples) ·
-[Tests](#what-the-tests-catch) · [Use](#use) · [What's inside](#whats-inside) · [Library](#library-at-a-glance)
+[Tests](#what-the-tests-catch) · [Use](#use) · [What's inside](#whats-inside) · [Library](#library-at-a-glance) ·
+[logo-coach](#logo-coach--a-mentor-instead-of-a-designer)
+
+---
+
+## logo-coach — a mentor instead of a designer
+
+`skills/logo-coach/` is a sibling skill for designers who want to **get better at logo design**, not outsource it.
+Claude acts as an art director and mentor: it asks, challenges, assigns, critiques and explains — grounded in design
+principles, real books and real work by human designers — and the designer does the design work.
+
+**Coach Mode (default)** — brief (or turn an Etsy/marketplace order into one, with a category clichés list) → your
+own word map with provoking prompts → research assignments (library, live case studies, a book topic) → a sketch
+quota and sketch review → critique rounds with a scored 10-criterion rubric, the audit and test sheet, and every
+point tied to a named principle → presentation practice → session wrap-up and a design journal. **It never redraws
+or "fixes" your mark** — it tells you what to change and why.
+
+**Sketch Mode (only when asked: "sketch mode", "give me starting points", "I'm stuck")** — one sheet of 12–20 rough
+greyscale thumbnails across different angles, each labelled with its idea and word-map link, then it stops and hands
+the choice back. **Remix** gives 6–10 rough variations of *your* sketch. Asking for a finished logo falls back to
+`logo-design` after a one-line reminder.
+
+Extras over `logo-design`: `references/` coaching-workflow, sketch-mode, critique-rubric, reading-list,
+inspiration-sources, practice-drills, design-journal; `scripts/concept_sheet.py --rough`, `scripts/raster_wrap.py`
+(PNG/photo uploads through the test sheet), `scripts/rubric_report.py` (one-page critique report).
+
+**Install** — Claude Code: copy `skills/logo-coach` (and `skills/logo-design`, for the fallback) to
+`~/.claude/skills/`. Claude.ai: upload `dist/logo-coach.zip` (or `dist/logo-coach-lite.zip` without the SVG library)
+in Settings → Capabilities → Skills. Build the zips with `python tools/package_skill.py`.
+
+Adapted by [sfn101](https://github.com/sfn101) from **logo-design** by
+[kaankiziltug](https://github.com/kaankiziltug/logo-design-skill) (MIT). Library logos remain trademarks of their
+owners — see [TRADEMARKS.md](TRADEMARKS.md).
 
 ---
 

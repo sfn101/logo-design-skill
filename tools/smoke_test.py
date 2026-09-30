@@ -18,6 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SKILL = os.path.join(ROOT, "skills", "logo-design")
 SCRIPTS = os.path.join(SKILL, "scripts")
 LIB = os.path.join(SKILL, "assets", "library", "svg")
+COACH = os.path.join(ROOT, "skills", "logo-coach")
 
 SYMBOL = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><title>Test symbol</title>
 <circle cx="128" cy="128" r="96" fill="#0F7C80"/>
@@ -128,11 +129,52 @@ def main():
                 [os.path.join(tmp, "web", "favicon.ico")])
         else:
             print("[skip] PNG checks (no renderer on this machine)")
+        # logo-coach: its own frontmatter + the scripts it adds on top of logo-design's
+        text = open(os.path.join(COACH, "SKILL.md"), encoding="utf-8").read()
+        m = re.match(r"---\nname: (.+)\ndescription: (.+?)\n", text)
+        ok = bool(m) and m.group(1).strip() == "logo-coach" and len(m.group(2)) <= 1024 and ": " not in m.group(2)
+        print(f"[{'ok  ' if ok else 'FAIL'}] logo-coach SKILL.md frontmatter")
+        if not ok:
+            failures.append("logo-coach frontmatter")
+        C = lambda f: os.path.join(COACH, "scripts", f)
+        thumbs = [sym] * 12
+        run("concept_sheet --rough (12 thumbnails)", [C("concept_sheet.py")] + thumbs + ["--rough", "--tags"] +
+            ["wordmark", "letterform", "lettermark", "pictorial", "abstract", "emblem"] * 2 +
+            ["-o", os.path.join(tmp, "rough.png")], [os.path.join(tmp, "rough.svg")])
+        out = run("concept_sheet --rough warns on angle overuse", [C("concept_sheet.py")] + thumbs +
+                  ["--rough", "--tags"] + ["abstract"] * 12 + ["-o", os.path.join(tmp, "rough2.png")])
+        if "used 12×" not in out:
+            failures.append("rough angle warning")
+            print("[FAIL] concept_sheet --rough did not warn about 12× one angle")
+        run("rubric_report --template", [C("rubric_report.py"), "--template"], ['"criterion": "concept"'])
+        crit = json.loads(subprocess.run([sys.executable, C("rubric_report.py"), "--template"],
+                                         capture_output=True).stdout.decode("utf-8"))
+        crit["mark"] = sym
+        crit["test_sheet"] = ""
+        crit_path = os.path.join(tmp, "critique.json")
+        with open(crit_path, "w", encoding="utf-8") as fh:
+            json.dump(crit, fh)
+        run("rubric_report", [C("rubric_report.py"), crit_path, "-o", os.path.join(tmp, "report.html")],
+            [os.path.join(tmp, "report.html")])
+        crit["scores"][0]["note"] = "looks good"
+        with open(crit_path, "w", encoding="utf-8") as fh:
+            json.dump(crit, fh)
+        p = subprocess.run([sys.executable, C("rubric_report.py"), crit_path, "-o", os.path.join(tmp, "r2.html")],
+                           capture_output=True)
+        ok = p.returncode == 1 and b"too vague" in p.stdout
+        print(f"[{'ok  ' if ok else 'FAIL'}] rubric_report rejects vague notes")
+        if not ok:
+            failures.append("rubric_report vague-note check")
+        if "available backends: none" not in which and "available backends:" in which:
+            run("raster_wrap", [C("raster_wrap.py"), png, "-o", os.path.join(tmp, "wrapped.svg")],
+                [os.path.join(tmp, "wrapped.svg")])
+
         run("package_skill", [os.path.join(ROOT, "tools", "package_skill.py")],
-            [os.path.join(ROOT, "dist", "logo-design.zip"), os.path.join(ROOT, "dist", "logo-design-lite.zip")],
+            [os.path.join(ROOT, "dist", "logo-design.zip"), os.path.join(ROOT, "dist", "logo-design-lite.zip"),
+             os.path.join(ROOT, "dist", "logo-coach.zip"), os.path.join(ROOT, "dist", "logo-coach-lite.zip")],
             cwd=ROOT)
 
-        caches = [d for d, _, _ in os.walk(SKILL) if os.path.basename(d) == "__pycache__"]
+        caches = [d for s in (SKILL, COACH) for d, _, _ in os.walk(s) if os.path.basename(d) == "__pycache__"]
         print(f"[{'ok  ' if not caches else 'FAIL'}] no __pycache__ written into the skill folder")
         if caches:
             failures.append("__pycache__ in skill folder: " + ", ".join(caches))

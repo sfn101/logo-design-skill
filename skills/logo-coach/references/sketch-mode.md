@@ -37,7 +37,10 @@ If the request is ambiguous ("any ideas for Stillroom?"), offer both in one line
   or a stock-looking skeleton), no optical corrections, no audit passes, no cleanup iterations. Speed over
   finish — the looseness tells the designer "this is a prompt, not a proposal".
 - **Range.** Spread across the angles in §3, **no more than two thumbnails per angle**. Aim for at least six
-  different angles on a 12–20 sheet.
+  different angles on a 12–20 sheet. Range means different *forms*, not different tags: two thumbnails that are the
+  same shape (an S lying flat, tagged once as letterform and once as typographic play) count as one — replace one.
+- **Letter test.** Any thumbnail built on a letter must still read as that letter at a glance. If it reads as
+  another letter or a symbol (a T that becomes a Y, an f or the Aries sign), fix it or say so in its label.
 - **Respect the brief.** If a brief or clichés list exists (or the category has obvious clichés — lotus and
   zen circle for yoga; wheat for bakeries; cups and beans for coffee), don't use them unless the thumbnail is a
   deliberate fresh form, and label it as such.
@@ -135,6 +138,8 @@ Trigger: the designer uploads their sketch and asks for variations ("give me var
   grid), **proportion**, or **figure/ground**. Don't swap in a different idea.
 - Same rough style and sheet: `concept_sheet.py … --rough --remix` with labels describing the change
   ("heavier stroke, wave closes into a circle"). Tags can repeat in Remix.
+- Apply the letter test to every variation; in the reply, name any variation where the letter stops reading (it
+  may still be interesting, but the designer should know the cost).
 - Same stopping rule. End with: "Which of these changes interests you? Take it back to paper and push it — then
   bring me your version for a critique."
 

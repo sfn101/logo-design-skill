@@ -1,0 +1,172 @@
+{
+  "skill_name": "logo-coach",
+  "evals": [
+    {
+      "id": 1,
+      "name": "coffee-critique",
+      "prompt": "Here's my logo for Ember & Oak, a small-batch coffee roaster (file: coffee-roaster-flawed.svg). What do you think?",
+      "expected_output": "Coach-mode critique: runs svg_audit + test sheet, rubric scores with principles, flags cup/steam/bean cliché, top changes in words, no redraw.",
+      "files": [
+        "evals/files/coffee-roaster-flawed.svg"
+      ],
+      "assertions": [
+        "Ran an automated structural audit (svg_audit.py or a script) on the designer's SVG and reported at least two of: live <text>, 6 colours/gradient, the near-miss ~43.5°/136.5° diagonal, the tiny dots",
+        "In the reply the designer reads, principles are named in words (e.g. 'focus on one thing', 'think small'), not only as bare file/section references",
+        "Factual claims about the file and the reference library/shelf are accurate (no miscounted colours, no overstated claims about what reference marks show)",
+        "Produced and looked at a visual test sheet (16 px / one-colour / reversed / squint or similar) saved as an output file",
+        "Scores the mark on a 1–5 rubric covering at least 8 distinct criteria",
+        "Every critique point (each score note and each top change) names the design principle behind it, citing a principle or reference by name",
+        "Identifies the steaming cup / coffee bean imagery as a category cliché",
+        "Gives a prioritised list of at most 3 top changes described in words",
+        "Does NOT produce any new or revised SVG/PNG logo mark (no redraw, no 'fixed' version) in the outputs",
+        "Ends by handing a decision or next exercise back to the designer"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "etsy-bakery-brief",
+      "prompt": "I got an Etsy order for a bakery brand kit. The buyer wrote: \"Hi! Need a logo + brand kit for my home bakery, Rise. Sourdough and pastries, I sell at the farmers market and on Instagram. Something cute but not childish, I love pink. Thanks!\" Help me start.",
+      "expected_output": "Brief built from the order, questions for the buyer, clichés list, word-map prompts; no concepts.",
+      "files": [],
+      "assertions": [
+        "Produces a structured one-page brief for Rise using what the buyer gave (name, sourdough/pastries, farmers market + Instagram, cute not childish, pink)",
+        "Includes an explicit 'clichés to avoid' list with at least 4 bakery-specific motifs (e.g. wheat, chef's hat, rolling pin, whisk)",
+        "Drafts concrete questions the designer can send back to the buyer to fill gaps",
+        "Gives word-mapping prompts or provoking questions for the designer to do the word map themselves",
+        "Does NOT propose logo concepts, mark ideas or visual directions (no 'an R made of dough' style ideas) and generates no SVG/PNG marks",
+        "Flags the scope of 'brand kit' (what's included / revisions) as something to clarify"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "sketch-mode-stillroom",
+      "prompt": "I'm stuck. Sketch mode: give me starting points for a yoga studio called Stillroom.",
+      "expected_output": "One rough greyscale sheet of 12–20 labelled thumbnails across varied angles, then stops and hands back.",
+      "files": [],
+      "assertions": [
+        "Produces exactly one concept-sheet image (PNG) containing all thumbnails",
+        "The sheet contains between 12 and 20 thumbnails",
+        "The thumbnails are greyscale / single colour (no colour versions)",
+        "Thumbnails span at least 6 different angles/mark types, with no angle used more than twice",
+        "No two thumbnails are near-duplicates of the same form (judged visually, regardless of tags)",
+        "Each thumbnail has a short label with the idea and the word/association it came from",
+        "Avoids the obvious yoga clichés (lotus, meditating figure, om symbol) or explicitly labels any use as a deliberate fresh form",
+        "Does NOT develop any thumbnail further: no colour versions, lockups, mockups, test sheets or kit",
+        "Ends by asking the designer to pick 2–3 to develop by hand and offers to critique their versions"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "sketch-review-rise",
+      "prompt": "Here are my sketches for Rise, a small sourdough bakery (file: rise-bakery-sketches.png). Which should I push?",
+      "expected_output": "Ranks directions with reasons, flags clichés and the Apple look-alike, sets the next task, no redraws.",
+      "files": [
+        "evals/files/rise-bakery-sketches.png"
+      ],
+      "assertions": [
+        "Refers to individual sketches by their number",
+        "Flags at least two of #1 (wheat), #2 (chef's hat) and #7 (rolling pin) as clichés or product-drawing",
+        "Flags #8 as resembling the Apple logo (or a similar famous mark)",
+        "Recommends a top 2–3 directions with a reason for each tied to a design principle",
+        "Sets a concrete next task (e.g. a number of variations of the chosen sketches)",
+        "Does NOT redraw, clean up or generate new versions of the sketches"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "remix-tidewell",
+      "prompt": "Give me variations of my sketch (file: tidewell-sketch.png). It's for Tidewell, a sea-swimming club.",
+      "expected_output": "Remix: 6–10 rough greyscale variations of the T+wave idea on one sheet, then stop.",
+      "files": [
+        "evals/files/tidewell-sketch.png"
+      ],
+      "assertions": [
+        "Correctly restates the sketch's idea (a T combined with a wave)",
+        "Produces one sheet image with between 6 and 10 variations",
+        "Every variation keeps the designer's core idea (T + wave) rather than swapping in unrelated ideas",
+        "Variations are rough and greyscale (no colour, no polished finals)",
+        "Each variation is labelled on the sheet with what changed (construction, weight, angle, geometry…)",
+        "The reply names any variation where the T no longer reads clearly as a T (letter test), or all variations visibly read as a T",
+        "Stops at the sheet and hands the choice back to the designer to develop by hand"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "law-firm-fallback",
+      "prompt": "Just make me a finished logo for a law firm. Hartley & Vance, employment law, London.",
+      "expected_output": "One-sentence reminder that Coach Mode exists, then respects the request and designs (logo-design workflow).",
+      "files": [],
+      "assertions": [
+        "Mentions in one or two sentences that a coaching mode exists / offers to coach instead",
+        "Does not refuse or lecture; respects the request and proceeds to design",
+        "Produces actual logo design output (SVG concepts or a concept sheet) for Hartley & Vance",
+        "The reminder about coaching appears at most once (not repeated throughout)"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "confidence-fitness",
+      "prompt": "Tell me it's perfect, I just need confidence. I'm presenting this to the client tomorrow (file: fitness-app-flawed.svg) — it's Pulse, a fitness app.",
+      "expected_output": "Stays kind and honest: acknowledges the ask, still gives real critique of the flawed mark.",
+      "files": [
+        "evals/files/fitness-app-flawed.svg"
+      ],
+      "assertions": [
+        "Does NOT call the logo perfect or say it's ready as-is",
+        "Acknowledges the designer's need for confidence in a warm, non-dismissive way",
+        "Identifies at least 3 real problems present in the file (e.g. 7 colours, tiny dots/hairlines that vanish small, swoosh/lightning clichés, near-miss angle, busy composition)",
+        "Names at least one thing that genuinely works, with a specific reason",
+        "Each criticism is tied to a named design principle",
+        "Gives prioritised, doable changes before tomorrow's presentation, without redrawing the logo",
+        "Separates what can realistically be fixed before tomorrow from bigger rethinks for a later round"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "wordmark-reading",
+      "prompt": "What should I read to get better at wordmarks?",
+      "expected_output": "Specific books/topics with reasons, correct authors, no quoted passages, plus a task.",
+      "files": [],
+      "assertions": [
+        "Recommends at least 3 specific books with correct title and author",
+        "Includes at least one wordmark-specific book (e.g. Michael Evamy's Logotype, Karen Cheng's Designing Type, Doyald Young)",
+        "Explains for each book what it teaches for wordmarks specifically",
+        "Does not quote passages from the books (no quotations longer than a few words)",
+        "Attaches a practical exercise or task to the reading"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "rationale-greenline",
+      "prompt": "Review my concept rationale: \"The logo is a modern, clean design that represents growth and trust. I used a blue colour because it's calming and a leaf because the company cares about the environment. The font is bold to show strength. I think it looks really professional and the client will love it.\" It's for Greenline, a solar panel installer.",
+      "expected_output": "Critiques as the client and as a senior designer; flags clichés and vague claims; asks the designer to rewrite.",
+      "files": [],
+      "assertions": [
+        "Contains a critique from the client's point of view",
+        "Contains a critique from a senior designer's point of view",
+        "Flags the vague, self-praising language (modern, clean, professional, 'client will love it')",
+        "Questions the leaf (and/or blue) as generic category choices for a solar installer",
+        "Points out that the rationale lacks a single clear idea / insight tied to the brief",
+        "Does NOT rewrite the whole rationale for the designer; asks them to rewrite (at most a one-sentence model)",
+        "Gives a short prioritised list of edits (at most 3 top edits) for the designer to make"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "good-mark-harbor",
+      "prompt": "Be straight with me — is this ready? (file: harbor-good.svg) It's the symbol for Harbor, a savings app. The H's crossbar is meant to be calm water.",
+      "expected_output": "Calibrated critique of a decent mark: earned praise, still rubric + principles + remaining improvements, no redraw.",
+      "files": [
+        "evals/files/harbor-good.svg"
+      ],
+      "assertions": [
+        "Gives a clear, non-contradictory verdict on whether it is ready (ready / ready with fixes / not yet) near the top of the reply",
+        "Ran an audit/test-sheet on the file and reports it passes the technical checks (1 colour, clean geometry)",
+        "Gives specific earned praise (e.g. one idea, one colour, survives small, idea readable)",
+        "Still names at least one genuine improvement or risk (e.g. distinctiveness of H letterforms, water line subtle at 16 px, typography/lockup untested)",
+        "Scores tie to named principles",
+        "Does NOT produce a redrawn or alternative version of the mark"
+      ]
+    }
+  ]
+}

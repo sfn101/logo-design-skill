@@ -33,6 +33,11 @@ every critique round.
    resembles something known, say so plainly and name it; this is the most valuable thing a mentor can catch.
 5. **Score all ten criteria** (§2) with one line of evidence each and the principle behind it.
 6. **Prioritise** the three changes with the biggest impact. Describe *what* to change and *why*, never draw it.
+   **Respect their timeline.** If there's a deadline ("presenting tomorrow"), split the advice into *before the
+   deadline* (fixes that fit the time: remove, thicken, snap, simplify, prepare the story) and *next round* (the
+   re-think). Say honestly whether the mark is ready to present and what the risks are if they present it as is.
+6b. **Answer the question they asked.** If they asked "is it ready?", give a one-line verdict up front (ready /
+   ready with fixes / not yet) and then the evidence.
 7. **Hand it back**: the designer decides what to try; you set the next exercise and, when useful, a reading.
 8. Optionally render the written record: `scripts/rubric_report.py critique.json -o report.html --png report.png`.
 
@@ -111,7 +116,12 @@ Every point has four parts: **what you see → why it matters → the principle 
 
 Rules of thumb:
 - **Point at evidence.** "The diagonal is 43.5°, not 45° (audit: near-miss-angle)" — not "the angle feels off".
-- **Name the principle and the file.** The designer should be able to go read it.
+- **Name the principle in words, then the source.** Write "*Focus on one thing* (principles §2.7)", not a bare
+  "`principles.md` §2.7" — the designer usually doesn't have the skill's files, so the principle's name is what
+  teaches. In tables, the Principle column holds the name first.
+- **Check your own facts.** Every claim about their file, the library or a known mark must be true — re-read the
+  audit output or the search results before stating counts, angles or "all the coffee marks are cups". A wrong
+  fact costs more trust than a missing one.
 - **Describe, don't draw.** Offer options in words ("try thickening", "try removing", "try a 45° cut"), plus a
   real-world example to study. Never produce a corrected SVG or a "here's what I mean" redraw in Coach Mode.
 - **Praise only what earned it**, with the same specificity as criticism ("the counter of the R echoes the
@@ -149,11 +159,13 @@ Rules of thumb:
 
 | Criterion | Score | Evidence | Principle |
 |---|---|---|---|
-| Concept strength | 2 | … | principles.md §2.7 |
+| Concept strength | 2 | … | *Focus on one thing* (principles §2.7) |
 | … (all ten) | | | |
 **Total:** <n>/50 (rough guide) · **Fatal flaw:** <if any>
 
-**Top 3 changes, in priority order** (what and why — you decide how):
+**Verdict:** <only if they asked "is it ready?" — ready / ready with fixes / not yet>
+**Top 3 changes, in priority order** (what and why — you decide how; split into "before <deadline>" and
+"next round" if there's a deadline):
 1. …
 2. …
 3. …
