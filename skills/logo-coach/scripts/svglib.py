@@ -23,7 +23,31 @@ _use_utf8_console()
 
 SKILL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIBRARY_DIR = os.path.join(SKILL_DIR, "assets", "library")
-LIBRARY_SVG_DIR = os.path.join(LIBRARY_DIR, "svg")
+
+
+def _library_svg_dir():
+    """The library SVG folder. Uploaded skills (e.g. claude.ai, max 200 files) ship it as assets/library/svg.zip
+    instead; that archive is extracted once to a temp cache (the skill folder may be read-only)."""
+    folder = os.path.join(LIBRARY_DIR, "svg")
+    archive = os.path.join(LIBRARY_DIR, "svg.zip")
+    if os.path.isdir(folder) or not os.path.isfile(archive):
+        return folder
+    import tempfile
+    import zipfile
+    cache = os.path.join(tempfile.gettempdir(), f"logo-library-{os.path.getsize(archive)}", "svg")
+    done = os.path.join(cache, ".extracted")
+    if not os.path.exists(done):
+        os.makedirs(cache, exist_ok=True)
+        with zipfile.ZipFile(archive) as z:
+            for name in z.namelist():
+                if name.endswith(".svg") and "/" not in name.strip("/"):
+                    with open(os.path.join(cache, name), "wb") as fh:
+                        fh.write(z.read(name))
+        open(done, "w").close()
+    return cache
+
+
+LIBRARY_SVG_DIR = _library_svg_dir()
 CATALOG_PATH = os.path.join(LIBRARY_DIR, "catalog.json")
 STATS_PATH = os.path.join(LIBRARY_DIR, "stats.json")
 

@@ -4,39 +4,58 @@
   python tools/package_skill.py                 # both skills
   python tools/package_skill.py logo-coach      # one skill
 
-Writes dist/<skill>.zip (full) + dist/<skill>-lite.zip for each skill. The lite package leaves out the 1,400+ SVG
-files and gallery.html (catalog metadata, scripts and all references are kept) for platforms with upload size
-limits. Eval fixtures (evals/) are development-only and never packaged.
+Writes dist/<skill>.zip (full) + dist/<skill>-lite.zip for each skill. claude.ai accepts at most 200 files per
+upload, so the full package stores the 1,400+ library SVGs as ONE nested archive, assets/library/svg.zip; the
+scripts extract it to a temp cache on first use (see svglib._library_svg_dir). The lite package leaves the SVGs
+and gallery.html out entirely (catalog metadata, scripts and all references are kept). Eval fixtures (evals/) are
+development-only and never packaged.
 """
+import io
 import os
 import sys
 import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIST = os.path.join(ROOT, "dist")
-SKIP_DIRS = {"__pycache__", ".DS_Store", "evals"}
 SKILLS = ["logo-design", "logo-coach"]
+MAX_FILES = 200
+
+
+def svg_archive(svg_dir):
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        for fn in sorted(os.listdir(svg_dir)):
+            if fn.lower().endswith(".svg"):
+                z.write(os.path.join(svg_dir, fn), fn)
+    return buf.getvalue()
 
 
 def build(skill, name, lite):
     src = os.path.join(ROOT, "skills", skill)
     os.makedirs(DIST, exist_ok=True)
     out = os.path.join(DIST, name)
+    count = 0
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         for dirpath, dirnames, filenames in os.walk(src):
             rel_dir = os.path.relpath(dirpath, src).replace(os.sep, "/")
-            dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS or rel_dir != "."]
+            if rel_dir == ".":
+                dirnames[:] = [d for d in dirnames if d != "evals"]
             dirnames[:] = [d for d in dirnames if d not in {"__pycache__", ".DS_Store"}]
-            if lite and rel_dir.startswith("assets/library/svg"):
-                continue
+            if rel_dir == "assets/library/svg" or rel_dir.startswith("assets/library/svg/"):
+                continue  # handled below: nested archive (full) or omitted (lite)
             for fn in filenames:
-                if fn in SKIP_DIRS or fn.endswith(".pyc"):
-                    continue
-                if lite and fn == "gallery.html":
+                if fn == ".DS_Store" or fn.endswith(".pyc") or (lite and fn == "gallery.html"):
                     continue
                 full = os.path.join(dirpath, fn)
                 z.write(full, os.path.join(skill, os.path.relpath(full, src)))
-    print(f"{out}  {os.path.getsize(out) / 1e6:.1f} MB")
+                count += 1
+        svg_dir = os.path.join(src, "assets", "library", "svg")
+        if not lite and os.path.isdir(svg_dir):
+            z.writestr(f"{skill}/assets/library/svg.zip", svg_archive(svg_dir))
+            count += 1
+    print(f"{out}  {os.path.getsize(out) / 1e6:.1f} MB  {count} files")
+    if count > MAX_FILES:
+        sys.exit(f"✖ {name} has {count} files — over the {MAX_FILES}-file upload limit")
 
 
 if __name__ == "__main__":
