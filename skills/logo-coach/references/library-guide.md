@@ -84,7 +84,7 @@ geometry and lowercase; "technical" by monoline, grids, brackets, isometric form
 
 ## 4. Curated lessons by technique (with example files)
 
-Every file below is in `assets/library/svg/`. Read them as SVG to study construction. In uploaded copies of the skill (claude.ai) that folder is shipped as `assets/library/svg.zip`: get real paths from `search_library.py … --format paths`, which extracts the archive to a temp cache on first use.
+Every file below is in `assets/library/svg/`. Read them as SVG to study construction. In uploaded copies of the skill (claude.ai) that folder is shipped as one text file, `assets/library/svg-bundle.json`: get real paths from `search_library.py … --format paths`, which unpacks it to a temp cache on first use.
 
 **Negative space** — figure and ground both carry meaning.
 - `auth0-icon.svg` star carved from a shield · `apache-camel.svg` camel cut from a circle · `doctrine.svg` arrow cut

@@ -5,12 +5,13 @@
   python tools/package_skill.py logo-coach      # one skill
 
 Writes dist/<skill>.zip (full) + dist/<skill>-lite.zip for each skill. claude.ai accepts at most 200 files per
-upload, so the full package stores the 1,400+ library SVGs as ONE nested archive, assets/library/svg.zip; the
-scripts extract it to a temp cache on first use (see svglib._library_svg_dir). The lite package leaves the SVGs
+upload and no nested archives, so the full package stores the 1,400+ library SVGs as ONE text file,
+assets/library/svg-bundle.json ({"file.svg": "<svg…>"}); the scripts unpack it to a temp cache on first use
+(see svglib._library_svg_dir). The lite package leaves the SVGs
 and gallery.html out entirely (catalog metadata, scripts and all references are kept). Eval fixtures (evals/) are
 development-only and never packaged.
 """
-import io
+import json
 import os
 import sys
 import zipfile
@@ -21,13 +22,13 @@ SKILLS = ["logo-design", "logo-coach"]
 MAX_FILES = 200
 
 
-def svg_archive(svg_dir):
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
-        for fn in sorted(os.listdir(svg_dir)):
-            if fn.lower().endswith(".svg"):
-                z.write(os.path.join(svg_dir, fn), fn)
-    return buf.getvalue()
+def svg_bundle(svg_dir):
+    files = {}
+    for fn in sorted(os.listdir(svg_dir)):
+        if fn.lower().endswith(".svg"):
+            with open(os.path.join(svg_dir, fn), encoding="utf-8", errors="replace") as fh:
+                files[fn] = fh.read()
+    return json.dumps(files, ensure_ascii=False, separators=(",", ":"))
 
 
 def build(skill, name, lite):
@@ -51,9 +52,12 @@ def build(skill, name, lite):
                 count += 1
         svg_dir = os.path.join(src, "assets", "library", "svg")
         if not lite and os.path.isdir(svg_dir):
-            z.writestr(f"{skill}/assets/library/svg.zip", svg_archive(svg_dir))
+            z.writestr(f"{skill}/assets/library/svg-bundle.json", svg_bundle(svg_dir))
             count += 1
+        nested = [n for n in z.namelist() if n.lower().endswith((".zip", ".tar", ".gz", ".tgz", ".7z", ".rar"))]
     print(f"{out}  {os.path.getsize(out) / 1e6:.1f} MB  {count} files")
+    if nested:
+        sys.exit(f"✖ {name} contains nested archives (not allowed on upload): {nested}")
     if count > MAX_FILES:
         sys.exit(f"✖ {name} has {count} files — over the {MAX_FILES}-file upload limit")
 

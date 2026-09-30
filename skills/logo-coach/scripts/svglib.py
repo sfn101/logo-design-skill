@@ -26,23 +26,25 @@ LIBRARY_DIR = os.path.join(SKILL_DIR, "assets", "library")
 
 
 def _library_svg_dir():
-    """The library SVG folder. Uploaded skills (e.g. claude.ai, max 200 files) ship it as assets/library/svg.zip
-    instead; that archive is extracted once to a temp cache (the skill folder may be read-only)."""
+    """The library SVG folder. Uploaded skills (e.g. claude.ai: max 200 files, no nested archives) ship it as one
+    text file, assets/library/svg-bundle.json ({"file.svg": "<svg…>"}); that bundle is unpacked once to a temp
+    cache (the skill folder may be read-only)."""
     folder = os.path.join(LIBRARY_DIR, "svg")
-    archive = os.path.join(LIBRARY_DIR, "svg.zip")
-    if os.path.isdir(folder) or not os.path.isfile(archive):
+    bundle = os.path.join(LIBRARY_DIR, "svg-bundle.json")
+    if os.path.isdir(folder) or not os.path.isfile(bundle):
         return folder
+    import json
     import tempfile
-    import zipfile
-    cache = os.path.join(tempfile.gettempdir(), f"logo-library-{os.path.getsize(archive)}", "svg")
+    cache = os.path.join(tempfile.gettempdir(), f"logo-library-{os.path.getsize(bundle)}", "svg")
     done = os.path.join(cache, ".extracted")
     if not os.path.exists(done):
         os.makedirs(cache, exist_ok=True)
-        with zipfile.ZipFile(archive) as z:
-            for name in z.namelist():
-                if name.endswith(".svg") and "/" not in name.strip("/"):
-                    with open(os.path.join(cache, name), "wb") as fh:
-                        fh.write(z.read(name))
+        with open(bundle, encoding="utf-8") as fh:
+            files = json.load(fh)
+        for name, text in files.items():
+            if name.endswith(".svg") and os.path.basename(name) == name:
+                with open(os.path.join(cache, name), "w", encoding="utf-8") as out:
+                    out.write(text)
         open(done, "w").close()
     return cache
 
